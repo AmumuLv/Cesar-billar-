@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0b3d91, #1d4ed8);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1e1e1e;
+}
+
+.contenedor-login {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.tarjeta-login {
+    background-color: white;
+    border-radius: 18px;
+    padding: 35px 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    text-align: center;
+}
+
+.logo-billar {
+    font-size: 3.2rem;
+    margin-bottom: 10px;
+}
+
+.tarjeta-login h1 {
+    font-size: 1.9rem;
+    color: #0b3d91;
+    margin-bottom: 8px;
+}
+
+.subtitulo {
+    color: #6b7280;
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+
+.grupo-input {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #374151;
+}
+
+.grupo-input input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.grupo-input input:focus {
+    border-color: #0b3d91;
+    box-shadow: 0 0 0 3px rgba(11, 61, 145, 0.12);
+}
+
+.extras-login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.92rem;
+    margin-bottom: 20px;
+    color: #4b5563;
+}
+
+.extras-login a {
+    text-decoration: none;
+    color: #0b3d91;
+    font-weight: bold;
+}
+
+.btn-login {
+    width: 100%;
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+.mensaje-demo {
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+@media (max-width: 480px) {
+    .tarjeta-login {
+        padding: 28px 20px;
+    }
+
+    .extras-login {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}

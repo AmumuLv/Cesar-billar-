@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Billar</title>
+    <link rel="stylesheet" href="Estilo.css">
+</head>
+<body>
+
+    <header class="encabezado">
+        <div class="encabezado-contenido">
+            <h1>Sistema de Administración de Billar</h1>
+
+            <div class="acciones-superior">
+                <button class="btn-superior" id="btnReportes" type="button">Reportes</button>
+                <button class="btn-superior" id="btnTarifas" type="button">Tarifas</button>
+
+                <div class="usuario-activo">
+                    <span class="icono-usuario">👤</span>
+                    <span>Administrador</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenedor">
+        <section class="panel-control">
+            <h2>Control de Mesa</h2>
+
+            <div class="aviso-hora" id="avisoHora"></div>
+
+            <div class="selector-mesa">
+                <label for="mesaSeleccionada"><strong>Seleccionar mesa:</strong></label>
+                <select id="mesaSeleccionada"></select>
+            </div>
+
+            <div class="info-mesa">
+                <p><strong>Mesa:</strong> <span id="infoMesa">Mesa 1</span></p>
+                <p><strong>Modalidad:</strong> <span id="infoModalidad">Billar</span></p>
+                <p><strong>Estado:</strong> <span id="infoEstado">Libre</span></p> 
+                <p><strong>Tiempo:</strong> <span class="temporizador" id="infoTiempo">00:00:00</span></p>
+                <p><strong>Precio/Hora:</strong> <span id="infoPrecio">S/ 12.00</span></p>
+            </div>
+
+            <div class="bloque-precio compacto" id="bloquePrecio">
+                <h3>Precio por hora</h3>
+                <div class="fila-personalizar">
+                    <label for="nuevoPrecioHora">Precio:</label>
+                    <input type="number" id="nuevoPrecioHora" placeholder="12" min="0" step="0.01">
+                    <button class="btn-guardar-precio" id="btnGuardarPrecio" type="button">Guardar</button>
+                </div>
+            </div>
+
+            <div class="bloque-modo-cobro compacto" id="bloqueModoCobro">
+                <h3>Modo de cobro</h3>
+                <div class="fila-personalizar">
+                    <label for="modoCobroMesa">Por:</label>
+                    <select id="modoCobroMesa">
+                        <option value="Hora">Hora</option>
+                        <option value="Corrido">Corrido</option>
+                    </select>
+                </div>
+                <p class="texto-ayuda-cobro"></p>
+            </div>
+
+            <div class="bloque-poker compacto" id="bloquePoker" style="display: none;">
+                <h3>Cobro manual de Poker</h3>
+                <div class="fila-personalizar">
+                    <label for="montoManualPoker">Monto:</label>
+                    <input type="number" id="montoManualPoker" placeholder="0" min="0" step="0.01">
+                </div>
+                <p class="texto-ayuda-poker">
+                    En Poker el sistema solo cuenta el tiempo. El cobro lo escribes tú.
+                </p>
+            </div>
+
+            <div class="bloque-division compacto" id="bloqueDivision">
+                <h3>Dividir cobro</h3>
+                <div class="fila-personalizar">
+                    <label for="cantidadPersonas">Personas:</label>
+                    <select id="cantidadPersonas">
+                        <option value="1">1 persona</option>
+                        <option value="2">2 personas</option>
+                        <option value="3">3 personas</option>
+                        <option value="4">4 personas</option>
+                    </select>
+                    <button class="btn-guardar-precio" id="btnDividirCobro" type="button">Dividir</button>
+                </div>
+                <p class="texto-ayuda-cobro" id="resultadoDivision">
+                    El cobro se mostrará dividido por persona.
+                </p>
+            </div>
+
+            <div class="acciones">
+                <button class="btn iniciar" id="btnIniciar" type="button">Iniciar Mesa</button>
+                <button class="btn finalizar" id="btnFinalizar" type="button">Finalizar Mesa</button>
+                <button class="btn pausar" id="btnPausar" type="button">Pausar Mesa</button>
+            </div>
+        </section>
+
+        <section class="estado-mesas">
+            <h2>Estado de Mesas</h2>
+
+            <section class="resumen">
+                <div class="tarjeta-resumen">
+                    <h3>Total de mesas</h3>
+                    <p id="totalMesas">8</p>
+                </div>
+
+                <div class="tarjeta-resumen">
+                    <h3>Libres</h3>
+                    <p id="mesasLibres">0</p>
+                </div>
+
+                <div class="tarjeta-resumen">
+                    <h3>Ocupadas</h3>
+                    <p id="mesasOcupadas">0</p>
+                </div>
+
+                <div class="tarjeta-resumen">
+                    <h3>Pausadas</h3>
+                    <p id="mesasPausadas">0</p>
+                </div>
+
+                <div class="tarjeta-resumen">
+                    <h3>Ingresos del día</h3>
+                    <p id="ingresosDia">S/ 0.00</p>
+                </div>
+            </section>
+
+            <div class="leyenda">
+                <span class="item-leyenda"><span class="color libre-color"></span> Libre</span>
+                <span class="item-leyenda"><span class="color ocupada-color"></span> Ocupada</span>
+                <span class="item-leyenda"><span class="color pausada-color"></span> Pausada</span>
+                <span class="item-leyenda"><span class="color poker-color"></span> Poker</span>
+            </div>
+
+            <div class="filtros">
+                <input type="text" id="buscarMesa" placeholder="Buscar mesa...">
+                <select id="filtroEstado">
+                    <option value="Todos">Todos los estados</option>
+                    <option value="Libre">Libres</option>
+                    <option value="Ocupada">Ocupadas</option>
+                    <option value="Pausada">Pausadas</option>
+                </select>
+            </div>
+
+            <div class="grid-mesas" id="gridMesas"></div>
+
+            <section class="historial-avisos">
+                <h2>Historial de Avisos</h2>
+                <div id="listaAvisos" class="lista-avisos">
+                    <div class="sin-avisos">Aún no hay avisos.</div>
+                </div>
+            </section>
+
+            <section class="historial">
+                <h2>Historial de Sesiones</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mesa</th>
+                            <th>Modalidad</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Tiempo</th>
+                            <th>Total</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoHistorial">
+                        <tr>
+                            <td colspan="7">Aún no hay sesiones registradas.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="acciones-historial">
+                    <button id="btnToggleHistorial" class="btn-toggle-historial" type="button" style="display: none;">
+                        Ver más
+                    </button>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p>Sistema de Administración de Billar - Versión inicial</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
