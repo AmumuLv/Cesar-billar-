@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-
     <div class="contenedor-login">
         <div class="tarjeta-login">
             <div class="logo-billar">🎱</div>
@@ -17,36 +16,18 @@
             <form id="formLogin">
                 <div class="grupo-input">
                     <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" placeholder="Ingresa tu usuario" required>
+                    <input type="text" id="usuario" required>
                 </div>
-
                 <div class="grupo-input">
                     <label for="clave">Contraseña</label>
-                    <input type="password" id="clave" placeholder="Ingresa tu contraseña" required>
+                    <input type="password" id="clave" required>
                 </div>
-
-                <div class="extras-login">
-                    <label>
-                        <input type="checkbox"> Recordarme
-                    </label>
-                    <a href="#">¿Olvidaste tu contraseña?</a>
-                </div>
-
                 <button type="submit" class="btn-login">Ingresar</button>
             </form>
 
-            <p class="mensaje-demo">
-                Demo: este login es solo visual por ahora.
-            </p>
+            <p class="mensaje-demo" id="mensajeLogin">Demo: usuarios <strong>admin/1234</strong> o <strong>cesar/billar2026</strong>.</p>
         </div>
     </div>
-
-    <script>
-        document.getElementById("formLogin").addEventListener("submit", function(e) {
-            e.preventDefault();
-            window.location.href = "index.html";
-        });
-    </script>
-
+    <script type="module" src="js/login.js"></script>
 </body>
 </html>

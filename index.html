@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Billar</title>
+    <title>Sistema de Billar Pro</title>
     <link rel="stylesheet" href="Estilo.css">
 </head>
 <body>
-
     <header class="encabezado">
         <div class="encabezado-contenido">
             <h1>Sistema de Administración de Billar</h1>
-
             <div class="acciones-superior">
-                <button class="btn-superior" id="btnReportes" type="button">Reportes</button>
-                <button class="btn-superior" id="btnTarifas" type="button">Tarifas</button>
-
+                <button class="btn-superior" id="btnExportarResumen" type="button">Exportar resumen (CSV)</button>
+                <button class="btn-superior" id="btnImprimir" type="button">Imprimir (PDF)</button>
                 <div class="usuario-activo">
                     <span class="icono-usuario">👤</span>
-                    <span>Administrador</span>
+                    <span id="nombreUsuarioActivo">Administrador</span>
+                    <button class="btn-mini" id="btnCerrarSesion" type="button">Salir</button>
                 </div>
             </div>
         </div>
@@ -27,7 +25,6 @@
     <main class="contenedor">
         <section class="panel-control">
             <h2>Control de Mesa</h2>
-
             <div class="aviso-hora" id="avisoHora"></div>
 
             <div class="selector-mesa">
@@ -38,108 +35,84 @@
             <div class="info-mesa">
                 <p><strong>Mesa:</strong> <span id="infoMesa">Mesa 1</span></p>
                 <p><strong>Modalidad:</strong> <span id="infoModalidad">Billar</span></p>
-                <p><strong>Estado:</strong> <span id="infoEstado">Libre</span></p> 
+                <p><strong>Estado:</strong> <span id="infoEstado">Libre</span></p>
                 <p><strong>Tiempo:</strong> <span class="temporizador" id="infoTiempo">00:00:00</span></p>
                 <p><strong>Precio/Hora:</strong> <span id="infoPrecio">S/ 12.00</span></p>
+                <p><strong>Total actual:</strong> <span id="infoTotal">S/ 0.00</span></p>
             </div>
 
             <div class="bloque-precio compacto" id="bloquePrecio">
-                <h3>Precio por hora</h3>
+                <h3>Tarifas profesionales</h3>
                 <div class="fila-personalizar">
-                    <label for="nuevoPrecioHora">Precio:</label>
-                    <input type="number" id="nuevoPrecioHora" placeholder="12" min="0" step="0.01">
-                    <button class="btn-guardar-precio" id="btnGuardarPrecio" type="button">Guardar</button>
+                    <label for="nuevoPrecioHora">Precio hora:</label>
+                    <input type="number" id="nuevoPrecioHora" min="0" step="0.01">
                 </div>
+                <div class="fila-personalizar">
+                    <label for="fraccionMinutos">Fracción:</label>
+                    <select id="fraccionMinutos">
+                        <option value="30">30 min</option>
+                        <option value="15">15 min</option>
+                    </select>
+                </div>
+                <div class="fila-personalizar">
+                    <label for="precioFraccion">Precio fracción:</label>
+                    <input type="number" id="precioFraccion" min="0" step="0.01">
+                </div>
+                <button class="btn-guardar-precio" id="btnGuardarPrecio" type="button">Guardar tarifas</button>
             </div>
 
             <div class="bloque-modo-cobro compacto" id="bloqueModoCobro">
                 <h3>Modo de cobro</h3>
                 <div class="fila-personalizar">
-                    <label for="modoCobroMesa">Por:</label>
+                    <label for="modoCobroMesa">Modalidad:</label>
                     <select id="modoCobroMesa">
-                        <option value="Hora">Hora</option>
-                        <option value="Corrido">Corrido</option>
+                        <option value="Hora">Hora (fracciones)</option>
+                        <option value="Corrido">Corrido (tiempo real)</option>
                     </select>
                 </div>
-                <p class="texto-ayuda-cobro"></p>
-            </div>
-
-            <div class="bloque-poker compacto" id="bloquePoker" style="display: none;">
-                <h3>Cobro manual de Poker</h3>
-                <div class="fila-personalizar">
-                    <label for="montoManualPoker">Monto:</label>
-                    <input type="number" id="montoManualPoker" placeholder="0" min="0" step="0.01">
-                </div>
-                <p class="texto-ayuda-poker">
-                    En Poker el sistema solo cuenta el tiempo. El cobro lo escribes tú.
-                </p>
-            </div>
-
-            <div class="bloque-division compacto" id="bloqueDivision">
-                <h3>Dividir cobro</h3>
                 <div class="fila-personalizar">
                     <label for="cantidadPersonas">Personas:</label>
                     <select id="cantidadPersonas">
-                        <option value="1">1 persona</option>
-                        <option value="2">2 personas</option>
-                        <option value="3">3 personas</option>
-                        <option value="4">4 personas</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
                     </select>
-                    <button class="btn-guardar-precio" id="btnDividirCobro" type="button">Dividir</button>
                 </div>
-                <p class="texto-ayuda-cobro" id="resultadoDivision">
-                    El cobro se mostrará dividido por persona.
-                </p>
+                <p class="texto-ayuda-cobro" id="resultadoDivision">El total se divide automáticamente.</p>
+            </div>
+
+            <div class="bloque-poker compacto" id="bloquePoker" style="display: none;">
+                <h3>Cobro manual de mesa de cartas/poker</h3>
+                <div class="fila-personalizar">
+                    <label for="montoManualPoker">Monto:</label>
+                    <input type="number" id="montoManualPoker" min="0" step="0.01">
+                </div>
             </div>
 
             <div class="acciones">
-                <button class="btn iniciar" id="btnIniciar" type="button">Iniciar Mesa</button>
-                <button class="btn finalizar" id="btnFinalizar" type="button">Finalizar Mesa</button>
-                <button class="btn pausar" id="btnPausar" type="button">Pausar Mesa</button>
+                <button class="btn iniciar" id="btnIniciar" type="button">Iniciar</button>
+                <button class="btn pausar" id="btnPausar" type="button">Pausar</button>
+                <button class="btn reanudar" id="btnReanudar" type="button" style="display:none;">Reanudar</button>
+                <button class="btn finalizar" id="btnFinalizar" type="button">Finalizar</button>
             </div>
         </section>
 
         <section class="estado-mesas">
             <h2>Estado de Mesas</h2>
-
             <section class="resumen">
-                <div class="tarjeta-resumen">
-                    <h3>Total de mesas</h3>
-                    <p id="totalMesas">8</p>
-                </div>
-
-                <div class="tarjeta-resumen">
-                    <h3>Libres</h3>
-                    <p id="mesasLibres">0</p>
-                </div>
-
-                <div class="tarjeta-resumen">
-                    <h3>Ocupadas</h3>
-                    <p id="mesasOcupadas">0</p>
-                </div>
-
-                <div class="tarjeta-resumen">
-                    <h3>Pausadas</h3>
-                    <p id="mesasPausadas">0</p>
-                </div>
-
-                <div class="tarjeta-resumen">
-                    <h3>Ingresos del día</h3>
-                    <p id="ingresosDia">S/ 0.00</p>
-                </div>
+                <div class="tarjeta-resumen"><h3>Total mesas</h3><p id="totalMesas">0</p></div>
+                <div class="tarjeta-resumen"><h3>Libres</h3><p id="mesasLibres">0</p></div>
+                <div class="tarjeta-resumen"><h3>Ocupadas</h3><p id="mesasOcupadas">0</p></div>
+                <div class="tarjeta-resumen"><h3>Pausadas</h3><p id="mesasPausadas">0</p></div>
+                <div class="tarjeta-resumen"><h3>Ingresos día</h3><p id="ingresosDia">S/ 0.00</p></div>
+                <div class="tarjeta-resumen"><h3>Ganancia real</h3><p id="gananciaReal">S/ 0.00</p></div>
             </section>
-
-            <div class="leyenda">
-                <span class="item-leyenda"><span class="color libre-color"></span> Libre</span>
-                <span class="item-leyenda"><span class="color ocupada-color"></span> Ocupada</span>
-                <span class="item-leyenda"><span class="color pausada-color"></span> Pausada</span>
-                <span class="item-leyenda"><span class="color poker-color"></span> Poker</span>
-            </div>
 
             <div class="filtros">
                 <input type="text" id="buscarMesa" placeholder="Buscar mesa...">
                 <select id="filtroEstado">
-                    <option value="Todos">Todos los estados</option>
+                    <option value="Todos">Todos</option>
                     <option value="Libre">Libres</option>
                     <option value="Ocupada">Ocupadas</option>
                     <option value="Pausada">Pausadas</option>
@@ -150,46 +123,57 @@
 
             <section class="historial-avisos">
                 <h2>Historial de Avisos</h2>
-                <div id="listaAvisos" class="lista-avisos">
-                    <div class="sin-avisos">Aún no hay avisos.</div>
-                </div>
+                <div id="listaAvisos" class="lista-avisos"><div class="sin-avisos">Aún no hay avisos.</div></div>
             </section>
 
             <section class="historial">
                 <h2>Historial de Sesiones</h2>
-
                 <table>
                     <thead>
-                        <tr>
-                            <th>Mesa</th>
-                            <th>Modalidad</th>
-                            <th>Inicio</th>
-                            <th>Fin</th>
-                            <th>Tiempo</th>
-                            <th>Total</th>
-                            <th>Acción</th>
-                        </tr>
+                        <tr><th>Mesa</th><th>Modalidad</th><th>Inicio</th><th>Fin</th><th>Tiempo</th><th>Total</th><th>Acción</th></tr>
                     </thead>
-                    <tbody id="cuerpoHistorial">
-                        <tr>
-                            <td colspan="7">Aún no hay sesiones registradas.</td>
-                        </tr>
-                    </tbody>
+                    <tbody id="cuerpoHistorial"><tr><td colspan="7">Aún no hay sesiones registradas.</td></tr></tbody>
                 </table>
-
                 <div class="acciones-historial">
-                    <button id="btnToggleHistorial" class="btn-toggle-historial" type="button" style="display: none;">
-                        Ver más
-                    </button>
+                    <button id="btnToggleHistorial" class="btn-toggle-historial" type="button" style="display:none;">Ver más</button>
+                    <button id="btnExportarHistorial" class="btn-toggle-historial" type="button">Exportar historial (CSV)</button>
                 </div>
+            </section>
+
+            <section class="historial">
+                <h2>Gastos del negocio</h2>
+                <div class="fila-gastos">
+                    <input type="text" id="gastoConcepto" placeholder="Concepto (Luz, alquiler...)">
+                    <input type="number" id="gastoMonto" placeholder="Monto" min="0" step="0.01">
+                    <button id="btnAgregarGasto" class="btn-superior" type="button">Agregar gasto</button>
+                </div>
+                <ul id="listaGastos" class="lista-gastos"></ul>
+            </section>
+
+            <section class="historial">
+                <h2>Reportes rápidos</h2>
+                <div id="reporteMesas" class="grafico-barras"></div>
+                <div id="reporteUso" class="grafico-barras"></div>
             </section>
         </section>
     </main>
 
-    <footer class="pie-pagina">
-        <p>Sistema de Administración de Billar - Versión inicial</p>
-    </footer>
+    <div class="modal" id="modalMesa" aria-hidden="true">
+        <div class="modal-contenido">
+            <h3>Agregar / editar mesa</h3>
+            <div class="fila-personalizar"><label for="mesaNombre">Nombre:</label><input id="mesaNombre" type="text" placeholder="Mesa VIP"></div>
+            <div class="fila-personalizar"><label for="mesaTipo">Tipo:</label>
+                <select id="mesaTipo"><option value="Billar">Billar</option><option value="Poker">Poker</option><option value="Cartas">Cartas</option></select>
+            </div>
+            <div class="fila-modal-acciones">
+                <button id="btnCancelarMesa" class="btn pausar" type="button">Cancelar</button>
+                <button id="btnGuardarMesa" class="btn iniciar" type="button">Guardar mesa</button>
+            </div>
+        </div>
+    </div>
 
-    <script src="app.js"></script>
+    <footer class="pie-pagina"><p>Sistema de Administración de Billar - versión profesional inicial</p></footer>
+
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
